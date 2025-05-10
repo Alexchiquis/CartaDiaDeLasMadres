@@ -31,7 +31,17 @@ h1 {
     margin-bottom: 50px;
     color: #444;
 }
+.imagen-abajo {
+  text-align: center;
+  margin-top: 20px;
+}
 
+.imagen-abajo img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px; /* opcional: esquinas redondeadas */
+  box-shadow: 0 0 10px rgba(0,0,0,0.1); /* opcional: sombra suave */
+}
 .contenedor {
     width: 400px;
 }
