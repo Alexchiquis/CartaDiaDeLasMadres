@@ -1,40 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
-    <title>Carta para mami</title>
+    <title>Feliz cumple, mami</title>
 </head>
 <body>
-    <h1>¡Feliz Dia Mami! ❤️</h1>
-    <div class="contenedor">
-        <div class="envoltura-sobre">
-            <div class="sobre">
-                <div class="carta">
-                    <div class="contenido">
-                        <strong>🌹🌹🌹🌹🌹🌹 Feliz día de las Madres 🌹🌹🌹🌹🌹🌹</strong>
-                        <p>
-Hoy es <strong>Tu día mami</strong>, el día que nos enseña, el<em> amor</em>, la <em>paciencia</em> y sacrificio. Hoy celebro no solo el día de las madres, sino el regalo de tenerte como guía y compañera. Gracias por ser mi ejemplo y mi motor.,"<strong>Te amo con todo mi corazón.</strong>. Gracias por celebrar conmigo cada logro, por secar mis lágrimas cuando tropiezo y por creer en mí incluso cuando yo dudo. <br> Ojalá disfrutes del viaje regalo a Canada. <br> <strong>Feliz Día Mami</strong>, mi <em>lugar seguro</em>. <br> Con mucho <strong>código</strong> (y <strong>amor</strong>), Tu hijo  programador Alex.  <br> <span style="font-size: 0.9em; color: grey;">PD: Si ésta carta fuera un programa, para salir sería:</span> <br> <code>"Gracias por TODO, Te amo mucho ❤️ EXIT."</code>
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class="corazon"></div>
-            <div class="solapa-derecha"></div>
-            <div class="solapa-izquierda"></div>
+    <div class="fondo-decor" aria-hidden="true">
+        <span class="glow glow-1"></span>
+        <span class="glow glow-2"></span>
+        <span class="glow glow-3"></span>
 
-        </div>
-                        <div class="imagen-abajo">
-                  <img src="alexmami.jpeg" alt="Foto con mamá">
-                    </div>
+        <span class="balloon b1"></span>
+        <span class="balloon b2"></span>
+        <span class="balloon b3"></span>
+        <span class="balloon b4"></span>
     </div>
-                           
 
-    <!-- <script src="script_v2.js"></script> -->
-     <script src="script_v2.js"></script>
+    <main class="app">
+        <header class="hero">
+            <p class="pill">Para mi mami en su cumpleaños</p>
+            <h1 class="titulo">¡Feliz cumple, mami!</h1>
+            <p class="subtitulo">Toca el corazón para abrir la carta. Cuando se abra… hay confeti.</p>
+        </header>
+
+        <section class="escena">
+            <div class="contenedor">
+                <div class="envoltura-sobre" role="button" tabindex="0" aria-label="Abrir carta">
+                    <div class="sobre">
+                        <div class="carta" aria-live="polite">
+                            <div class="contenido">
+                                <h2 class="carta-titulo">
+                                    Feliz cumple, <span class="resaltado">mami</span> 🎂
+                                </h2>
+
+                                <p>
+                                    Hoy celebro tu vida y el regalo inmenso de tenerte. Gracias por tu
+                                    <strong>amor</strong>, tu <strong>paciencia</strong> y por ser mi <em>lugar seguro</em>.
+                                </p>
+
+                                <p>
+                                    Gracias por cada abrazo que cura, por cada palabra que levanta, y por creer en mí
+                                    incluso cuando yo dudo. Eres mi ejemplo, mi motor y mi mayor bendición.
+                                </p>
+
+                                <div class="separador" aria-hidden="true"></div>
+
+                                <p class="regalo">
+                                    <strong>Tu regalo está pendiente</strong>… hasta que tú decidas qué quieres.
+                                    Yo feliz de consentirte y cumplir tu antojo cuando me digas.
+                                </p>
+
+                                <div class="acciones">
+                                    <button class="btn" type="button" id="btnConfetti">Celebrar</button>
+                                    <button class="btn btn-sec" type="button" id="btnDeseo">Escribir tu deseo</button>
+                                </div>
+
+
+                                <p class="firma">
+                                    Con mucho <strong>código</strong> (y mucho <strong>amor</strong>),<br>
+                                    tu hijo Alex.
+                                </p>
+
+                                <p class="pd">
+                                    <span class="pd-label">PD:</span> Si esta carta fuera un programa, para salir sería:
+                                    <code>Gracias por TODO. Te amo mucho. ❤️ EXIT;</code>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="corazon" aria-hidden="true"></div>
+                    <div class="solapa-derecha" aria-hidden="true"></div>
+                    <div class="solapa-izquierda" aria-hidden="true"></div>
+                </div>
+
+                <figure class="imagen-abajo">
+                    <img src="alexmami.jpeg" alt="Foto con mamá">
+                    <figcaption>Un pedacito de nosotros. Te amo, mami.</figcaption>
+                </figure>
+            </div>
+        </section>
+    </main>
+
+    <script src="script_v2.js"></script>
 </body>
 </html>
