@@ -142,6 +142,10 @@ body{
 }
 
 .envoltura-sobre{
+  --lift: -300px;
+}
+
+.envoltura-sobre{
   position: relative;
   border-radius: 20px;
   background: var(--fondo-sobre);
@@ -367,16 +371,16 @@ body{
   z-index: 0;
 }
 .abierto .corazon{
-  transform: rotate(90deg);
+  transform: translate(-50%,0) rotate(90deg);
   transition-delay: 0.4s;
   animation: none;
 }
 
 .carta.mostrar-carta{
-  transform: translateY(-300px);
+  transform: translateY(var(--lift));
 }
 .carta.abierta{
-  transform: translateY(-300px);
+  transform: translateY(var(--lift));
   z-index: 10000;
 }
 .carta.abierta.cerrando-carta{
@@ -436,8 +440,7 @@ body{
 
 @media (max-width: 460px){
   .sobre{ height: 290px; }
-  .carta.mostrar-carta,
-  .carta.cerrando-carta{ transform: translateY(-280px); }
+  .envoltura-sobre{ --lift: -280px; }
   .carta-titulo{ font-size: 30px; }
 }
 

@@ -84,6 +84,7 @@ function activar(e) {
 
     window.setTimeout(() => {
       // usamos "abierta" para que quede arriba
+      carta.classList.remove("cerrando-carta");
       carta.classList.add("abierta");
     }, DELAY_CARTA_MS);
 
