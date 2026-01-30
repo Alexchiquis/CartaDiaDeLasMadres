@@ -339,6 +339,7 @@ body{
   transition: transform 0.5s ease-in-out 1s;
   z-index: 999;
   box-shadow: 0 16px 26px rgba(255, 46, 122, 0.32);
+  cursor: pointer;
 }
 .corazon::before,
 .corazon::after{
@@ -374,10 +375,16 @@ body{
 .carta.mostrar-carta{
   transform: translateY(-300px);
 }
-.carta.cerrando-carta{
+.carta.abierta{
   transform: translateY(-300px);
+  z-index: 10000;
 }
-.carta.abierta{ z-index: 10000; }
+.carta.abierta.cerrando-carta{
+  transform: translateY(0);
+}
+.carta.cerrando-carta{
+  transform: translateY(0);
+}
 .envoltura-sobre.desactivar-sobre .sobre::before{ pointer-events: none; }
 
 .imagen-abajo{

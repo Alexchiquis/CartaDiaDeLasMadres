@@ -25,12 +25,12 @@
         <header class="hero">
             <p class="pill">Para mi mami en su cumpleaños</p>
             <h1 class="titulo">¡Feliz cumple, mami!</h1>
-            <p class="subtitulo">Toca el corazón para abrir la carta. Cuando se abra… hay confeti.</p>
+            <p class="subtitulo">Toca el corazón una vez para abrir (sale confeti). Toca otra vez para cerrar.</p>
         </header>
 
         <section class="escena">
             <div class="contenedor">
-                <div class="envoltura-sobre" role="button" tabindex="0" aria-label="Abrir carta">
+                <div class="envoltura-sobre" role="group" aria-label="Carta de cumpleaños">
                     <div class="sobre">
                         <div class="carta" aria-live="polite">
                             <div class="contenido">
@@ -67,7 +67,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="corazon" aria-hidden="true"></div>
+                    <div class="corazon" role="button" tabindex="0" aria-label="Abrir o cerrar la carta"></div>
                     <div class="solapa-derecha" aria-hidden="true"></div>
                     <div class="solapa-izquierda" aria-hidden="true"></div>
                 </div>

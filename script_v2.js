@@ -1,13 +1,15 @@
 const envoltura = document.querySelector(".envoltura-sobre");
 const carta = document.querySelector(".carta");
+const corazon = document.querySelector(".corazon");
 const contenido = document.querySelector(".contenido");
 
 // Evitamos depender de transitionend (en algunos navegadores/GitHub Pages se pierde,
 // y eso hace que “tengas que picar varias veces”).
-const DURACION_SOLAPA_MS = 720;
-const DURACION_CARTA_MS = 650;
+const DURACION_SOLAPA_MS = 680;
+const DURACION_CARTA_MS = 620;
+const DELAY_CARTA_MS = 120; // pequeña espera para que la solapa empiece a abrir antes de levantar la carta
 
-let estado = "cerrado"; // cerrado | solapa-abierta | carta-abierta
+let estado = "cerrado"; // cerrado | abierto
 let bloqueadoHasta = 0;
 
 function ahora() {
@@ -69,50 +71,48 @@ function debeIgnorarInteraccion(e) {
 }
 
 function activar(e) {
-  if (!envoltura || !carta) return;
+  if (!envoltura || !carta || !corazon) return;
   if (estaBloqueado()) return;
   if (debeIgnorarInteraccion(e)) return;
 
-  switch (estado) {
-    case "cerrado": {
-      envoltura.classList.add("abierto");
-      bloquear(DURACION_SOLAPA_MS);
-      window.setTimeout(() => {
-        estado = "solapa-abierta";
-      }, DURACION_SOLAPA_MS);
-      break;
-    }
+  if (estado === "cerrado") {
+    // 1 clic: abre solapa + levanta la carta (se siente “todo a la vez”)
+    const total = DURACION_SOLAPA_MS + DURACION_CARTA_MS + DELAY_CARTA_MS;
+    bloquear(total);
 
-    case "solapa-abierta": {
-      carta.classList.add("mostrar-carta");
-      bloquear(DURACION_CARTA_MS);
-      window.setTimeout(() => {
-        carta.classList.remove("mostrar-carta");
-        carta.classList.add("abierta");
-        estado = "carta-abierta";
-        lanzarConfetti();
-      }, DURACION_CARTA_MS);
-      break;
-    }
+    envoltura.classList.add("abierto");
 
-    case "carta-abierta": {
-      carta.classList.add("cerrando-carta");
-      bloquear(DURACION_CARTA_MS);
-      window.setTimeout(() => {
-        carta.classList.remove("cerrando-carta", "abierta");
-        envoltura.classList.remove("abierto");
-        estado = "cerrado";
-      }, DURACION_CARTA_MS);
-      break;
-    }
+    window.setTimeout(() => {
+      // usamos "abierta" para que quede arriba
+      carta.classList.add("abierta");
+    }, DELAY_CARTA_MS);
+
+    window.setTimeout(() => {
+      lanzarConfetti();
+      estado = "abierto";
+    }, DELAY_CARTA_MS + Math.min(420, DURACION_CARTA_MS));
+
+    return;
   }
+
+  // estado === "abierto"
+  const total = DURACION_CARTA_MS + DURACION_SOLAPA_MS;
+  bloquear(total);
+
+  // Baja carta primero
+  carta.classList.add("cerrando-carta");
+  window.setTimeout(() => {
+    carta.classList.remove("abierta", "cerrando-carta");
+    envoltura.classList.remove("abierto");
+    estado = "cerrado";
+  }, DURACION_CARTA_MS);
 }
 
-// Pointer events suelen ir más suaves (y sin delay) en móvil.
-envoltura?.addEventListener("pointerup", activar);
+// Click/tap SOLO en el corazón (para que se entienda).
+corazon?.addEventListener("pointerup", activar);
 
-// Accesibilidad: Enter/Espacio.
-envoltura?.addEventListener("keydown", (e) => {
+// Accesibilidad: Enter/Espacio en el corazón.
+corazon?.addEventListener("keydown", (e) => {
   if (e.key === "Enter" || e.key === " ") {
     e.preventDefault();
     activar(e);
