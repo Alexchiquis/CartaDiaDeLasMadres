@@ -5,12 +5,19 @@ const contenido = document.querySelector(".contenido");
 
 // Evitamos depender de transitionend (en algunos navegadores/GitHub Pages se pierde,
 // y eso hace que “tengas que picar varias veces”).
-const DURACION_SOLAPA_MS = 680;
-const DURACION_CARTA_MS = 620;
-const DELAY_CARTA_MS = 90; // pequeña espera para que la solapa empiece a abrir
+const CLASE_ABIERTO = "abierto";
+const CLASE_EXTRAIDA = "extraida";
+const CLASE_GUARDANDO = "guardando";
 
-let estado = "cerrado"; // cerrado | abierto
+const DURACION_SOLAPA_MS = 680;
+const DURACION_CARTA_MS = 650;
+const DURACION_CARTA_SNAPPY_MS = 520;
+const DELAY_CARTA_MS = 160; // debe coincidir con CSS (transition-delay de .abierto .carta)
+const MOMENTO_EXTRAER_MS = DELAY_CARTA_MS + 420; // cambia a "extraida" cuando ya asomó
+
 let bloqueadoHasta = 0;
+let timerExtraer = 0;
+let timerCerrar = 0;
 
 function ahora() {
   return Date.now();
@@ -26,6 +33,13 @@ function bloquear(ms) {
   window.setTimeout(() => {
     envoltura.classList.remove("animando");
   }, ms);
+}
+
+function limpiarTimers() {
+  if (timerExtraer) window.clearTimeout(timerExtraer);
+  if (timerCerrar) window.clearTimeout(timerCerrar);
+  timerExtraer = 0;
+  timerCerrar = 0;
 }
 
 function rand(min, max) {
@@ -75,49 +89,69 @@ function activar(e) {
   if (estaBloqueado()) return;
   if (debeIgnorarInteraccion(e)) return;
 
-  if (estado === "cerrado") {
-    // 1 clic: abre solapa + muestra carta (sin mandarla “hasta arriba”)
-    const total = DURACION_SOLAPA_MS + DURACION_CARTA_MS + DELAY_CARTA_MS;
+  const estaAbierto = envoltura.classList.contains(CLASE_ABIERTO);
+  const estaExtraida = envoltura.classList.contains(CLASE_EXTRAIDA);
+
+  if (!estaAbierto) {
+    limpiarTimers();
+    envoltura.classList.remove(CLASE_GUARDANDO);
+    envoltura.classList.remove(CLASE_EXTRAIDA);
+
+    // Abrir: solapa abre y luego la carta “asoma” (todo se controla por CSS)
+    const total = DELAY_CARTA_MS + DURACION_CARTA_MS + DURACION_CARTA_SNAPPY_MS + 420;
     bloquear(total);
+    envoltura.classList.add(CLASE_ABIERTO);
 
-    envoltura.classList.add("abierto");
-
-    window.setTimeout(() => {
-      // "abierta" la deja en posición legible (definida en CSS)
-      carta.classList.remove("cerrando-carta");
-      carta.classList.add("abierta");
-    }, DELAY_CARTA_MS);
+    timerExtraer = window.setTimeout(() => {
+      envoltura.classList.add(CLASE_EXTRAIDA);
+    }, MOMENTO_EXTRAER_MS);
 
     window.setTimeout(() => {
       lanzarConfetti();
-      estado = "abierto";
-    }, DELAY_CARTA_MS + Math.min(420, DURACION_CARTA_MS));
+    }, MOMENTO_EXTRAER_MS + 180);
 
-    // Ayuda a que quede en pantalla para leer (especialmente en móvil)
+    // Centrar para leer
     window.setTimeout(() => {
       try {
         envoltura.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch {}
-    }, DELAY_CARTA_MS + 60);
+    }, 240);
 
     return;
   }
 
-  // estado === "abierto"
-  const total = DURACION_CARTA_MS + DURACION_SOLAPA_MS;
-  bloquear(total);
+  // Cerrar: baja la hoja (todavía arriba), luego entra al sobre y finalmente cierra.
+  limpiarTimers();
 
-  // Baja carta primero
-  carta.classList.add("cerrando-carta");
-  window.setTimeout(() => {
-    carta.classList.remove("abierta", "cerrando-carta");
-    envoltura.classList.remove("abierto");
-    estado = "cerrado";
-  }, DURACION_CARTA_MS);
+  if (estaExtraida) {
+    const total = DURACION_CARTA_SNAPPY_MS + DURACION_CARTA_MS + DURACION_SOLAPA_MS + 520;
+    bloquear(total);
+
+    envoltura.classList.add(CLASE_GUARDANDO);
+    envoltura.classList.remove(CLASE_EXTRAIDA);
+
+    timerCerrar = window.setTimeout(() => {
+      envoltura.classList.remove(CLASE_GUARDANDO);
+      envoltura.classList.remove(CLASE_ABIERTO);
+    }, DURACION_CARTA_SNAPPY_MS + 60);
+
+    return;
+  }
+
+  // Si estaba "abierto" pero todavía no llegó a extraerse (o se interrumpió), cierra normal.
+  const total = DURACION_CARTA_MS + DURACION_SOLAPA_MS + 420;
+  bloquear(total);
+  envoltura.classList.remove(CLASE_GUARDANDO);
+  envoltura.classList.remove(CLASE_EXTRAIDA);
+  envoltura.classList.remove(CLASE_ABIERTO);
 }
 
-// Click/tap SOLO en el corazón (para que se entienda).
-corazon?.addEventListener("pointerup", activar);
+// Click/tap en el sobre o en el corazón (intuitivo).
+envoltura?.addEventListener("pointerup", activar);
+corazon?.addEventListener("pointerup", (e) => {
+  e.stopPropagation();
+  activar(e);
+});
 
 // Accesibilidad: Enter/Espacio en el corazón.
 corazon?.addEventListener("keydown", (e) => {
