@@ -7,7 +7,7 @@ const contenido = document.querySelector(".contenido");
 // y eso hace que “tengas que picar varias veces”).
 const DURACION_SOLAPA_MS = 680;
 const DURACION_CARTA_MS = 620;
-const DELAY_CARTA_MS = 120; // pequeña espera para que la solapa empiece a abrir antes de levantar la carta
+const DELAY_CARTA_MS = 90; // pequeña espera para que la solapa empiece a abrir
 
 let estado = "cerrado"; // cerrado | abierto
 let bloqueadoHasta = 0;
@@ -76,14 +76,14 @@ function activar(e) {
   if (debeIgnorarInteraccion(e)) return;
 
   if (estado === "cerrado") {
-    // 1 clic: abre solapa + levanta la carta (se siente “todo a la vez”)
+    // 1 clic: abre solapa + muestra carta (sin mandarla “hasta arriba”)
     const total = DURACION_SOLAPA_MS + DURACION_CARTA_MS + DELAY_CARTA_MS;
     bloquear(total);
 
     envoltura.classList.add("abierto");
 
     window.setTimeout(() => {
-      // usamos "abierta" para que quede arriba
+      // "abierta" la deja en posición legible (definida en CSS)
       carta.classList.remove("cerrando-carta");
       carta.classList.add("abierta");
     }, DELAY_CARTA_MS);
@@ -92,6 +92,13 @@ function activar(e) {
       lanzarConfetti();
       estado = "abierto";
     }, DELAY_CARTA_MS + Math.min(420, DURACION_CARTA_MS));
+
+    // Ayuda a que quede en pantalla para leer (especialmente en móvil)
+    window.setTimeout(() => {
+      try {
+        envoltura.scrollIntoView({ behavior: "smooth", block: "center" });
+      } catch {}
+    }, DELAY_CARTA_MS + 60);
 
     return;
   }

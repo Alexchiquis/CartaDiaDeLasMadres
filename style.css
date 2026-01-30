@@ -142,10 +142,8 @@ body{
 }
 
 .envoltura-sobre{
-  --lift: -300px;
-}
-
-.envoltura-sobre{
+  /* Qué tanto “sale” la carta (menos = más legible en pantalla) */
+  --open-offset: -120px;
   position: relative;
   border-radius: 20px;
   background: var(--fondo-sobre);
@@ -167,6 +165,7 @@ body{
   width: min(440px, 100%);
   height: 310px;
   border-radius: 20px;
+  z-index: 1;
 }
 
 .sobre::before{
@@ -190,6 +189,7 @@ body{
   inset: 0;
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.70), rgba(255, 255, 255, 0.35));
+  z-index: 3;
 }
 
 .solapa-derecha{
@@ -370,6 +370,14 @@ body{
   transform: rotateX(180deg);
   z-index: 0;
 }
+.abierto .sobre{
+  /* al abrir, el sobre (y la carta) quedan por encima de las solapas */
+  z-index: 4;
+}
+.abierto .solapa-derecha,
+.abierto .solapa-izquierda{
+  z-index: 2;
+}
 .abierto .corazon{
   transform: translate(-50%,0) rotate(90deg);
   transition-delay: 0.4s;
@@ -377,10 +385,10 @@ body{
 }
 
 .carta.mostrar-carta{
-  transform: translateY(var(--lift));
+  transform: translateY(var(--open-offset));
 }
 .carta.abierta{
-  transform: translateY(var(--lift));
+  transform: translateY(var(--open-offset));
   z-index: 10000;
 }
 .carta.abierta.cerrando-carta{
@@ -440,7 +448,7 @@ body{
 
 @media (max-width: 460px){
   .sobre{ height: 290px; }
-  .envoltura-sobre{ --lift: -280px; }
+  .envoltura-sobre{ --open-offset: -70px; }
   .carta-titulo{ font-size: 30px; }
 }
 
